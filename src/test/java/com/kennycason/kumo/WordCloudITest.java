@@ -9,6 +9,7 @@ import com.kennycason.kumo.font.scale.LinearFontScalar;
 import com.kennycason.kumo.font.scale.SqrtFontScalar;
 import com.kennycason.kumo.image.AngleGenerator;
 import com.kennycason.kumo.nlp.FrequencyAnalyzer;
+import com.kennycason.kumo.nlp.tokenizer.AnsjNlpTokenizer;
 import com.kennycason.kumo.nlp.tokenizer.ChineseWordTokenizer;
 import com.kennycason.kumo.palette.ColorPalette;
 import org.apache.commons.io.IOUtils;
@@ -301,7 +302,8 @@ public class WordCloudITest {
     @Test
     public void dragonChinese() throws IOException {
         final FrequencyAnalyzer frequencyAnalyzer = new FrequencyAnalyzer();
-        frequencyAnalyzer.setWordTokenizer(new ChineseWordTokenizer());
+        frequencyAnalyzer.setWordTokenizer(new AnsjNlpTokenizer());
+//        frequencyAnalyzer.setWordTokenizer(new ChineseWordTokenizer());
         frequencyAnalyzer.setWordFrequenciesToReturn(900);
         frequencyAnalyzer.setMinWordLength(1);
         frequencyAnalyzer.setStopWords(Arrays.asList("是", "不", "了", "的", "个", "子"));
@@ -310,14 +312,37 @@ public class WordCloudITest {
         final Dimension dimension = new Dimension(555, 555);
         final WordCloud wordCloud = new WordCloud(dimension, CollisionMode.PIXEL_PERFECT);
         wordCloud.setPadding(1);
-        wordCloud.setBackgroundColor(new Color(0xE35A05));
+        wordCloud.setBackgroundColor(new Color(0x6365EA));
         wordCloud.setAngleGenerator(new AngleGenerator(0));
-        wordCloud.setBackground(new PixelBoundryBackground(getInputStream("backgrounds/dragon.png")));
-        wordCloud.setColorPalette(new ColorPalette(new Color(0x0), new Color(0x333333), new Color(0x555555)));
-        wordCloud.setFontScalar(new SqrtFontScalar(6, 50));
+        wordCloud.setBackground(new PixelBoundryBackground(getInputStream("backgrounds/cloud_bg.bmp")));
+        wordCloud.setColorPalette(new ColorPalette(new Color(0x0), new Color(0xD47B88), new Color(0x55EA6B), new Color(0x007B88), new Color(0x00EA6B), new Color(0xD40088), new Color(0x55006B)));
+        wordCloud.setFontScalar(new SqrtFontScalar(5, 30));
         wordCloud.build(wordFrequencies);
         wordCloud.writeToFile("output/dragon_chinese.png");
     }
+
+    @Test
+    public void htmlTest() throws IOException {
+        final FrequencyAnalyzer frequencyAnalyzer = new FrequencyAnalyzer();
+        frequencyAnalyzer.setWordTokenizer(new AnsjNlpTokenizer());
+//        frequencyAnalyzer.setWordTokenizer(new ChineseWordTokenizer());
+        frequencyAnalyzer.setWordFrequenciesToReturn(900);
+        frequencyAnalyzer.setMinWordLength(1);
+        frequencyAnalyzer.setStopWords(Arrays.asList("是", "不", "了", "的", "个", "子"));
+
+        final List<WordFrequency> wordFrequencies = frequencyAnalyzer.load(getInputStream("text/html.txt"));
+        final Dimension dimension = new Dimension(555, 555);
+        final WordCloud wordCloud = new WordCloud(dimension, CollisionMode.PIXEL_PERFECT);
+        wordCloud.setPadding(1);
+        wordCloud.setBackgroundColor(new Color(0x6365EA));
+        wordCloud.setAngleGenerator(new AngleGenerator(0));
+        wordCloud.setBackground(new PixelBoundryBackground(getInputStream("backgrounds/cloud_fg.bmp")));
+        wordCloud.setColorPalette(new ColorPalette(new Color(0x0), new Color(0xD47B88), new Color(0x55EA6B), new Color(0x007B88), new Color(0x00EA6B), new Color(0xD40088), new Color(0x55006B)));
+        wordCloud.setFontScalar(new SqrtFontScalar(10, 100));
+        wordCloud.build(wordFrequencies);
+        wordCloud.writeToFile("output/html.png");
+    }
+
 
     @Test
     public void largeCircleTest() throws IOException {

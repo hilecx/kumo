@@ -11,3 +11,4 @@ bin
 .idea/*
 *.iml
 /output
+dependency-reduced-pom.xml

@@ -1,11 +1,11 @@
-Kumo
-==============
+# Kumo
 
 Kumo's goal is to create a powerful and user friendly Word Cloud API in Java. Kumo directly generates an image file without the need to create an applet as many other libraries do.
 
 Please feel free to jump in and help improve Kumo! There are many places for performance optimization in Kumo!
 
-**Current Features**
+### Current Features
+
 - Draw Rectangle, Circle or Image Overlay word clouds. Image Overlay will draw words over all non-transparent pixels.
 - Linear, Square-Root Font Scalars. Fully extendable.
 - Variable Font Sizes.
@@ -18,17 +18,24 @@ Please feel free to jump in and help improve Kumo! There are many places for per
 - Layered Word Clouds. Overlay multiple word clouds.
 - WhiteSpace and Chinese Word Tokenizer. Fully extendable. 
 - Frequency Analyzer to tokenize, filter and compute word counts.
+- Command Line Interface
 
-**Available from Maven Central**
+### Available from Maven Central
+
 ```xml
 <dependency>
     <groupId>com.kennycason</groupId>
     <artifactId>kumo</artifactId>
-    <version>1.5</version>
+    <version>1.8</version>
 </dependency>
 ```
 
-**Screenshots**
+#### CLI Install via Brew (NEW!)
+
+`brew install https://raw.githubusercontent.com/kennycason/kumo/master/script/kumo.rb`
+
+### Screenshots
+
 <table>
 <tr><td>
 <img src="output/whale_wordcloud_large_impact.png?raw=true" width="300"/>
@@ -68,11 +75,11 @@ Please feel free to jump in and help improve Kumo! There are many places for per
 <tr><td>
 <img src="output/bubbletext.png?raw=true" width="300"/>
 </td><td>
-<img src="output/parallelBubbleText.png?raw=true" width="300"/>
+<img src="output/wordcloud_emoji.png?raw=true" width="300"/>
 </td></tr>
 </table>
 
-**Examples**
+### Examples
 
 Example to generate a Word Cloud on top of an image.
 
@@ -249,7 +256,7 @@ for (int i = 0; i < lwc.getLayers(); i++) {
     final WordCloud worldCloud = parallelLayeredWordCloud.getAt(i);
     worldCloud.setAngleGenerator(new AngleGenerator(0));
     worldCloud.setPadding(3);
-    worldCloud.setWordStartScheme(new CenterWordStart());
+    worldCloud.setWordStartStrategy(new CenterWordStart());
     worldCloud.setKumoFont(new KumoFont(FONTS[i]));
     worldCloud.setColorPalette(new ColorPalette(colors[i]));
 
@@ -267,7 +274,7 @@ parallelLayeredWordCloud.writeToFile("parallelBubbleText.png");
 
 Refer to JPanelDemo.java for an example integrating into a JPanel.
 
-**Tokenizers**
+### Tokenizers
 
 Tokenizers are the code that splits a sentence/text into a list of words. Currently only two tokenizers are built into Kumo.
 To add your own just create a class that override the `Tokenizer` interface and call the `FrequencyAnalyzer.setTokenizer()` or `FrequencyAnalyzer.addTokenizer()`.
@@ -278,7 +285,7 @@ To add your own just create a class that override the `Tokenizer` interface and 
 | ChineseWordTokenizer |
 
 
-**Filters**
+### Filters
 
 After tokenization, filters are applied to each word to determine whether or not should be omitted from the word list. 
 
@@ -292,7 +299,7 @@ To add set the filter, call `FrequencyAnalyzer.setFilter()` or `FrequencyAnalyze
 | StopWordFilter | Internally used, the FrequencyAnalyzer makes this filter easy to use via `FrequencyAnalyzer.setStopWords()`. |
 | WordSizeFilter | Internally used, the FrequencyAnalyzer makes this filter easy to use via `FrequencyAnalyzer.setMinWordLength()` and `FrequencyAnalyzer.setMaxWordLength()`. |
 
-**Normalizers**
+### Normalizers
 
 After word tokenization and filtering has occurred you can further transform each word via a normalizer.
 The default normalizer ia `lowerCase•characterStripping*trimToEmpty(word)`, the normalizer is even named `DefaultNormalizer`
@@ -309,3 +316,69 @@ To add set the normalizer, call `FrequencyAnalyzer.setNormalizer()` or `Frequenc
 | StringToHexNormalizer | Converts each character to it's hex value and concatenates them. |
 | DefaultNormalizer | Combines the TrimToEmptyNormalizer, CharacterStrippingNormalizer, and LowerCaseNormalizer. |
 | BubbleTextNormalizer | Replaces A-Z,a-z with characters enclosed in Bubbles ⓐ-ⓩⒶ-Ⓩ (requires a supporting font) |
+
+
+### Command Line Interface (CLI)
+
+Kumo can now be accessed via CLI. It is not quite as flexible as the programmatic interface yet but should support most of the common needs.
+
+The CLI Documentation can be found [here](https://github.com/kennycason/kumo/blob/master/CLI.md).
+
+The below examples assume you have the jar installed under the name of "kumo". To install via Brew run the following command.
+
+`brew install https://raw.githubusercontent.com/kennycason/kumo/master/script/kumo.rb`
+
+Examples:
+
+Create a standard word cloud.
+```
+kumo --input "https://en.wikipedia.org/wiki/Nintendo" --output "/tmp/wordcloud.png"
+```
+
+Create a standard word cloud excluding stop words.
+```
+kumo --input "https://en.wikipedia.org/wiki/Nintendo" --output "/tmp/wordcloud.png" --stop-words "nintendo,the"
+```
+
+Create a standard word cloud with a limited word count.
+```
+kumo --input "https://en.wikipedia.org/wiki/Nintendo" --output "/tmp/wordcloud.png" --word-count 10
+```
+
+Create a standard word cloud with a custom width and height.
+```
+kumo --input "https://en.wikipedia.org/wiki/Nintendo" --output "/tmp/wordcloud.png" --width 256 --height 256
+```
+
+Create a standard word cloud with custom font configuration.
+```
+kumo --input "https://en.wikipedia.org/wiki/Nintendo" --output "/tmp/wordcloud.png" --font-scalar sqrt --font-type Impact --font-weight plain --font-size-min 4 --font-size-max 60
+```
+
+Create a standard word cloud with a custom shape.
+```
+kumo --input "https://en.wikipedia.org/wiki/Nintendo" --output "/tmp/wordcloud.png" --width 990 --height 618 --background "https://raw.githubusercontent.com/kennycason/kumo/master/src/test/resources/backgrounds/whale.png
+```
+
+Create a standard word cloud with a custom color palette.
+```
+kumo --input "https://en.wikipedia.org/wiki/Nintendo" --output "/tmp/wordcloud.png" --color "(255,0,0),(0,255,0),(0,0,255)"
+```
+```
+kumo --input "https://en.wikipedia.org/wiki/Nintendo" --output "/tmp/wordcloud.png" --color "(0xffffff),(0xcccccc),(0x999999),(0x666666),(0x333333)"
+```
+
+Create a standard word cloud using a Chinese tokenizer
+```
+kumo --input "https://zh.wikipedia.org/wiki/%E4%BB%BB%E5%A4%A9%E5%A0%82" --output "/tmp/wordcloud.png" --tokenizer chinese
+```
+
+Create a polar word cloud
+```
+kumo --input "https://en.wikipedia.org/wiki/Nintendo,https://en.wikipedia.org/wiki/PlayStation" --output "/tmp/nintendo_vs_playstation.png" --type polar --color "(0x00ff00),(0x00dd00),(0x007700)|(0xff0000),(0xdd0000),(0x770000)"
+```
+
+Create a layered word cloud
+```
+kumo --input "https://www.haskell.org/, https://en.wikipedia.org/wiki/Haskell_(programming_language)" --output "/tmp/nintendo_vs_playstation.png" --type layered --background "https://raw.githubusercontent.com/kennycason/kumo/master/src/test/resources/backgrounds/haskell_1.bmp,https://raw.githubusercontent.com/kennycason/kumo/master/src/test/resources/backgrounds/haskell_2.bmp" --color "(0xFA6C07),(0xFF7614),(0xFF8936)|(0x080706),(0x3B3029),(0x47362A)"
+```

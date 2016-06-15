@@ -34,7 +34,7 @@ public class PixelBoundryBackground implements Background {
         this.collisionRaster = new CollisionRaster(bufferedImage);
         this.rectangleBackground = new RectangleBackground(new Dimension(bufferedImage.getWidth(), bufferedImage.getHeight()));
     }
-    
+
     /**
      * Creates a PixelBoundaryBackground using an image from the input file
      * 
@@ -81,6 +81,10 @@ public class PixelBoundryBackground implements Background {
             }
         }
         return true;
+    }
+
+    public RectangleBackground getRectangleBackground() {
+        return rectangleBackground;
     }
 
 }

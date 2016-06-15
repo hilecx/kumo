@@ -14,7 +14,7 @@ public class RectangleBackground implements Background {
     private static final Point ZERO = new Point(0, 0);
 
     private final Point position;
-    
+
     private final Dimension dimension;
 
     /**
@@ -50,4 +50,7 @@ public class RectangleBackground implements Background {
                 ", width=" + dimension.width + ", height=" + dimension.height + "]";
     }
 
+    public Dimension getDimension() {
+        return dimension;
+    }
 }

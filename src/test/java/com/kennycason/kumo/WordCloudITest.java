@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by kenny on 6/29/14.
@@ -301,6 +302,7 @@ public class WordCloudITest {
 
     @Test
     public void dragonChinese() throws IOException {
+        long starttime = System.currentTimeMillis();
         final FrequencyAnalyzer frequencyAnalyzer = new FrequencyAnalyzer();
         frequencyAnalyzer.setWordTokenizer(new AnsjNlpTokenizer());
 //        frequencyAnalyzer.setWordTokenizer(new ChineseWordTokenizer());
@@ -319,6 +321,7 @@ public class WordCloudITest {
         wordCloud.setFontScalar(new SqrtFontScalar(5, 30));
         wordCloud.build(wordFrequencies);
         wordCloud.writeToFile("output/dragon_chinese.png");
+        LOGGER.debug("endtime - starttime: "+(System.currentTimeMillis() - starttime));
     }
 
     @Test

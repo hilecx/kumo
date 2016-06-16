@@ -87,6 +87,7 @@ public class WordCloud {
 
         Collections.sort(wordFrequencies);
         int currentWord = 1;
+        int skipCount = 0;
         for (final Word word : buildWords(wordFrequencies, this.colorPalette)) {
             final Point point = wordStartStrategy.getStartingPoint(dimension, word);
             final boolean placed = place(word, point);
@@ -95,11 +96,19 @@ public class WordCloud {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("placed: " + word.getWord() + " (" + currentWord + "/" + wordFrequencies.size() + ")");
                 }
+                skipCount = 0;
             } else {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("skipped: " + word.getWord() + " (" + currentWord + "/" + wordFrequencies.size() + ")");
                 }
                 skipped.add(word);
+                skipCount++;
+                LOGGER.debug("skipCount: " + skipCount);
+                if(skipCount > 4){
+                    LOGGER.debug("Let's skip all after words");
+                    break;
+                }
+
             }
             currentWord++;
         }

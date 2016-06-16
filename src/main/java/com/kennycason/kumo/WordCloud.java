@@ -104,7 +104,7 @@ public class WordCloud {
                 skipped.add(word);
                 skipCount++;
                 LOGGER.debug("skipCount: " + skipCount);
-                if(skipCount > 4){
+                if(skipCount > 9){
                     LOGGER.debug("Let's skip all after words");
                     break;
                 }

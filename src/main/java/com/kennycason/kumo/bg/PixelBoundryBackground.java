@@ -57,6 +57,34 @@ public class PixelBoundryBackground implements Background {
         this(new File(filepath));
     }
 
+    /**
+     * Creates a PixelBoundaryBackground using an InputStream to load an image
+     * with scale
+     *
+     * @param imageInputStream
+     *            InputStream containing an image file
+     * @param scale
+     * @throws IOException when fails to open file stream
+     */
+    public PixelBoundryBackground(final InputStream imageInputStream, float scale) throws IOException {
+        final BufferedImage bufferedImage = ImageIO.read(imageInputStream);
+        BufferedImage scaledImage = scaleBufferedImage(bufferedImage, scale, bufferedImage.getType());
+        this.collisionRaster = new CollisionRaster(scaledImage);
+        this.rectangleBackground = new RectangleBackground(new Dimension(scaledImage.getWidth(), scaledImage.getHeight()));
+    }
+
+    private BufferedImage scaleBufferedImage(BufferedImage originalImage, float scale, int imgType){
+        if(imgType == 0)
+            imgType = BufferedImage.TYPE_INT_ARGB;
+        Float newWidth = originalImage.getWidth() * scale;
+        Float newHeigth = originalImage.getHeight() * scale;
+        BufferedImage resizedImage = new BufferedImage(newWidth.intValue(), newHeigth.intValue(), imgType);
+        Graphics2D g = resizedImage.createGraphics();
+        g.drawImage(originalImage, 0, 0, newWidth.intValue(), newHeigth.intValue(), null);
+        g.dispose();
+        return resizedImage;
+    }
+
     @Override
     public boolean isInBounds(Collidable collidable) {
         // check if bounding boxes intersect
